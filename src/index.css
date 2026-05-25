@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cream font-sans text-gray-800 antialiased;
+  }
+  * {
+    @apply box-border;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl shadow-card p-6;
+  }
+  .card-hover {
+    @apply transition-shadow duration-200 hover:shadow-card-hover;
+  }
+  .btn-primary {
+    @apply bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-200 active:scale-95;
+  }
+  .btn-secondary {
+    @apply bg-green-50 hover:bg-green-100 text-green-700 font-medium px-5 py-2.5 rounded-xl transition-all duration-200 active:scale-95;
+  }
+  .btn-danger {
+    @apply bg-red-50 hover:bg-red-100 text-red-600 font-medium px-5 py-2.5 rounded-xl transition-all duration-200 active:scale-95;
+  }
+  .stat-card {
+    @apply bg-white rounded-2xl shadow-card p-5 flex items-center gap-4;
+  }
+  .input {
+    @apply w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all;
+  }
+  .badge-drying {
+    @apply inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-full;
+  }
+  .badge-idle {
+    @apply inline-flex items-center gap-1.5 bg-gray-100 text-gray-500 text-xs font-semibold px-2.5 py-1 rounded-full;
+  }
+  .badge-complete {
+    @apply inline-flex items-center gap-1.5 bg-blue-100 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full;
+  }
+  .badge-aborted {
+    @apply inline-flex items-center gap-1.5 bg-red-100 text-red-600 text-xs font-semibold px-2.5 py-1 rounded-full;
+  }
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c9d7ca; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #a0b8a2; }
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 30px;
+}
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  transition: .3s;
+}
+.toggle-slider:before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background: white;
+  border-radius: 50%;
+  transition: .3s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+input:checked + .toggle-slider { background: #2d9960; }
+input:checked + .toggle-slider:before { transform: translateX(26px); }
