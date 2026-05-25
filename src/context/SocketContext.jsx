@@ -12,7 +12,10 @@ export function SocketProvider({ children }) {
   const [activeBatch, setActiveBatch] = useState(null);
 
   useEffect(() => {
-    socketRef.current = io(window.location.origin, { path: "/socket.io" });
+    socketRef.current = io("https://veggiedryer-backend.onrender.com", { 
+      path: "/socket.io",
+      transports: ["websocket", "polling"]
+    });
     const s = socketRef.current;
 
     s.on("connect",    () => setConnected(true));

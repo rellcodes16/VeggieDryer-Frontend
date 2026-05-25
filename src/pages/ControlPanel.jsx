@@ -30,34 +30,45 @@ export default function ControlPanel() {
     setTimeout(() => setToast(null), 3500);
   };
 
-  const fetchStatus = async () => {
-    try {
-      const [statusRes, batchRes] = await Promise.all([getDryerStatus(), getActiveBatch()]);
-      setStatus(statusRes.data.data);
-      setActiveBatch(batchRes.data.data);
-      setTargetTemp(statusRes.data.data.targetTemperature);
-      setDryingTime(statusRes.data.data.dryingTimeMinutes);
-    } catch (e) {
-      showToast("Failed to load status", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchStatus = async () => {
+  try {
+    const [statusRes, batchRes] = await Promise.all([getDryerStatus(), getActiveBatch()]);
+    setStatus(statusRes.data.data);
+    setIsDryerOn(statusRes.data.data.dryerOn); 
+    setActiveBatch(batchRes.data.data);
+    setTargetTemp(statusRes.data.data.targetTemperature);
+    setDryingTime(statusRes.data.data.dryingTimeMinutes);
+  } catch (e) {
+    showToast("Failed to load status", "error");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => { fetchStatus(); }, []);
 
-  const isDryerOn  = socketStatus?.dryerOn ?? status?.dryerOn ?? false;
+  const [isDryerOn, setIsDryerOn] = useState(false);
   const isDrying   = activeBatch !== null;
   const live       = sensorData || status?.latestSensor;
   const elapsed    = activeBatch ? Math.round((Date.now() - new Date(activeBatch.startTime)) / 60000) : 0;
 
-  const handleToggleDryer = async () => {
-    try {
-      if (isDryerOn) { await turnDryerOff(); showToast("Dryer turned off"); }
-      else           { await turnDryerOn();  showToast("Dryer turned on 🔥"); }
-      fetchStatus();
-    } catch { showToast("Failed to toggle dryer", "error"); }
-  };
+const handleToggleDryer = async () => {
+  const newState = !isDryerOn;
+  setIsDryerOn(newState);
+  try {
+    if (newState) {
+      await turnDryerOn();
+      showToast("Dryer turned on");
+    } else {
+      await turnDryerOff();
+      showToast("Dryer turned off");
+    }
+    fetchStatus();
+  } catch {
+    setIsDryerOn(!newState);
+    showToast("Failed to toggle dryer", "error");
+  }
+};
 
   const handleSaveSettings = async () => {
     setSaving(true);
