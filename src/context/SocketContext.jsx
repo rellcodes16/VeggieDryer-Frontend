@@ -18,6 +18,15 @@ export function SocketProvider({ children }) {
     });
     const s = socketRef.current;
 
+    s.on("connect", () => {
+  console.log("Socket connected:", s.id);
+  setConnected(true);
+});
+
+s.on("connect_error", (err) => {
+  console.log("Socket error:", err.message);
+});
+
     s.on("connect",    () => setConnected(true));
     s.on("disconnect", () => setConnected(false));
 
